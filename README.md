@@ -6,6 +6,12 @@ CodeCraftHub is a local learning tracker for developers. It provides a Spring Bo
 - Jackson handles JSON requests, responses, and file storage.
 - The API validates inputs and returns JSON error messages for invalid data, missing courses, and storage errors.
 
+## Course context
+
+I built CodeCraftHub as a final project for IBM's *Generative AI: Elevate Your Software Development Career* course on Coursera. The lab was an exercise in using generative AI to turn requirements into a working REST API and verify its behavior with HTTP requests.
+
+ChatGPT generated the Spring Boot backend from the lab prompts, drafted this README, and produced the sample `curl` commands. I ran the backend locally and checked its API responses as part of the lab.
+
 ## Installation
 
 1. Install a JDK (Java 17 or later) and Maven. Install `curl` to run the API examples.
