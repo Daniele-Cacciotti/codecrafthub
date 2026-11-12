@@ -1,6 +1,6 @@
 # CodeCraftHub
 
-CodeCraftHub is a local learning tracker for developers. It provides a Spring Boot REST API for creating, viewing, updating, and deleting courses. Each course has a name, description, target completion date, and progress status.
+CodeCraftHub is a local learning tracker for developers. It provides a Spring Boot REST API for creating, viewing, updating, and deleting courses. Each course has a name, description, target completion date, and progress status. A browser dashboard lets you manage courses without using the terminal.
 
 - Course data persists in `courses.json` between runs.
 - Jackson handles JSON requests, responses, and file storage.
@@ -10,7 +10,7 @@ CodeCraftHub is a local learning tracker for developers. It provides a Spring Bo
 
 I built CodeCraftHub as a final project for IBM's *Generative AI: Elevate Your Software Development Career* course on Coursera. The lab was an exercise in using generative AI to turn requirements into a working REST API and verify its behavior with HTTP requests.
 
-ChatGPT generated the Spring Boot backend from the lab prompts, drafted this README, and produced the sample `curl` commands. I ran the backend locally and checked its API responses as part of the lab.
+ChatGPT generated the Spring Boot backend from the lab prompts, drafted this README, and produced the sample `curl` commands. I used Bolt to generate the HTML, CSS, and JavaScript dashboard. I ran the backend locally and checked its API responses as part of the lab.
 
 ## Installation
 
@@ -38,12 +38,23 @@ java -jar target/codecrafthub-1.0.0.jar
 
 The application listens on `127.0.0.1:8080` by default. It creates `courses.json` in the working directory on first launch. Leave the server running while you try the examples in a second terminal.
 
+### Open the dashboard
+
+With Spring Boot running, start a static file server in a second terminal from the project root. This command requires Python 3.
+
+```bash
+python3 -m http.server 3000 --bind 127.0.0.1
+```
+
+Open the dashboard at the address below. Use `127.0.0.1` for the dashboard because the API allows that exact origin. [Open the CodeCraftHub dashboard](http://127.0.0.1:3000/)
+
 ## API endpoints
 
 | Method | Endpoint | Operation | Success response |
 | --- | --- | --- | --- |
 | `POST` | `/api/courses` | Create a course | `201 Created` with `success` and `course` |
 | `GET` | `/api/courses` | List courses | `200 OK` with `success`, `count`, and `courses` |
+| `GET` | `/api/courses/stats` | Count courses by status | `200 OK` with `success`, `total`, and `by_status` |
 | `GET` | `/api/courses/{id}` | Get a course by ID | `200 OK` with `success` and `course` |
 | `PUT` | `/api/courses/{id}` | Update the supplied fields | `200 OK` with `success` and `course` |
 | `DELETE` | `/api/courses/{id}` | Delete a course | `204 No Content` |
@@ -89,6 +100,7 @@ Set `COURSE_ID` to the `id` from the create response. The first course in a fres
 COURSE_ID=1
 curl -i "$API_URL"
 curl -i "$API_URL/$COURSE_ID"
+curl -i "$API_URL/stats"
 ```
 
 ### Update a course
@@ -115,9 +127,8 @@ A successful delete returns an empty body. A subsequent `GET` for that ID return
 | --- | --- |
 | `mvn` is missing or uses an older Java version | Run `mvn -version` and check the Java version it reports. Put the Maven executable on `PATH` and set `JAVA_HOME` to your JDK directory if needed. |
 | Maven cannot find `pom.xml` | Open a terminal in the `codecrafthub` project folder. |
-| Port `8080` is in use | Stop the other application or start CodeCraftHub with `mvn spring-boot:run -Dspring-boot.run.arguments=--server.port=8081`. Update `API_URL` to use `8081` as well. |
+| Port `8080` is in use | Stop the other application or start CodeCraftHub with `mvn spring-boot:run -Dspring-boot.run.arguments=--server.port=8081`. Update `API_URL` in your terminal and `API_BASE` in `index.html` to use `8081`. |
 | `GET` returns `"count": 0` | This is expected for an empty catalog. If you already added courses, check that you started the app from the same directory as your `courses.json`. |
 | `400 Bad Request` | Check the `error` field. Send a JSON object with `Content-Type: application/json`, use `target_date` in `YYYY-MM-DD` format, and match the capitalization and spacing of the status values. |
 | `404 Not Found` | List the courses and check the ID in the URL. |
 | `500 Internal Server Error` mentioning `courses.json` | Check the server log. The file must contain a valid JSON array, and the application needs permission to read it and write to its directory. |
-
