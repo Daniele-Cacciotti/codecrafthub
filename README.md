@@ -6,6 +6,12 @@ CodeCraftHub is a local learning tracker for developers. It provides a Spring Bo
 - Jackson handles JSON requests, responses, and file storage.
 - The API validates inputs and returns JSON error messages for invalid data, missing courses, and storage errors.
 
+## Screenshot
+
+![CodeCraftHub dashboard with the course form and four example courses](docs/screenshots/dashboard.jpg)
+
+*Local dashboard with example courses at different stages of completion.*
+
 ## Course context
 
 I built CodeCraftHub as a final project for IBM's *Generative AI: Elevate Your Software Development Career* course on Coursera. The lab was an exercise in using generative AI to turn requirements into a working REST API and verify its behavior with HTTP requests.
